@@ -20,9 +20,10 @@
         <div>
             <div><span>Account:</span><input id="accountId" type="text" maxlength="255"/> </div>
             <div><span>Password:</span><input id="pwId" type="password" maxlength="255"/></div>
+            <div><span>reportId:</span><input id="reportId" type="text" maxlength="255"/></div>
         </div>
         <div>
-            <button id="insertDisclosure">insert Report 241</button>
+            <button id="insertDisclosure">insert Report</button>
         </div>
     </p>
 </body>
@@ -32,7 +33,7 @@
         // Check that we loaded into Word
         if (info.host === Office.HostType.Word) {
             document.getElementById("helloButton").onclick = sayHello;
-            document.getElementById("insertDisclosure").onclick = fetchData;
+            document.getElementById("insert report").onclick = fetchData244;
         }
     });
 
@@ -50,10 +51,11 @@
     async function fetchData() {
         try {
             const authUrl = "https://devapi.eqm.ai/authenticate";
-            const reportUrl = "https://devapi.eqm.ai/disclosurereport/241";
+            const reportUrl = "https://devapi.eqm.ai/disclosurereport/";
 
             const account = document.getElementById("accountId").value;
             const password = document.getElementById("pwId").value;
+            const reportId = document.getElementById("reportId").value;
 
             const authResponse = await fetch(authUrl, {
                 method: 'POST',
@@ -67,7 +69,12 @@
             });
             const authData = await authResponse.json();
             const token = authData.token;
-            const reportResponse = await fetch(reportUrl, {
+            const params = new URLSearchParams({
+                reportId: `${reportId}`
+            });
+
+            const url = `${reportUrl}?${params}`;
+            const reportResponse = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

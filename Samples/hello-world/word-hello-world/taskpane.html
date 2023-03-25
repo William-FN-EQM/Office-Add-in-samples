@@ -82,7 +82,6 @@
                 //console.log(reportData.content);
                 context.document.body.insertHtml(reportData.content, Word.InsertLocation.end);
                 context.document.body.insertParagraph(reportData.content, Word.InsertLocation.end);
-                context.document.body.Word.insertHtml(reportData.content, Word.InsertLocation.end);
                 //p4.font.color = "blue";
                 await context.sync();
             });

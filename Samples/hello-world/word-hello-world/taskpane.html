@@ -36,7 +36,8 @@
             document.getElementById("insertReport").onclick = fetchData;
         }
     });
-
+    document.getElementById("helloButton").onclick = sayHello;
+            document.getElementById("insertReport").onclick = fetchData;
     function sayHello() {
         return Word.run((context) => {
 
@@ -80,13 +81,17 @@
             });
 
             const reportData = await reportResponse.json();
+            const parser = new DOMParser();
+            const parsedHtml = parser.parseFromString(reportDataContent, 'text/html');
+            const disclosureDiv = parsedHtml.querySelector('.disclosure');
+            const dataValue = disclosureDiv.getAttribute('data-value');
+            const decodedDataValue = decodeHtmlEntities(dataValue);
+            // const disclosureDivInPage = document.querySelector('div[data-id="4002"]');
+
             await Word.run(async (context) => {
                 const body = context.document.body;
 
-                //console.log(reportData.content);
-                context.document.body.insertHtml(reportData.content, Word.InsertLocation.end);
-                context.document.body.insertParagraph(reportData.content, Word.InsertLocation.end);
-                //p4.font.color = "blue";
+                body.insertHtml(decodedDataValue, Word.InsertLocation.end);
                 await context.sync();
             });
         } catch (error) {
@@ -94,6 +99,13 @@
         }
     }
 
+    function decodeHtmlEntities(str) {
+        return str.replace(/&quot;/g, '"')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&#39;/g, "'");
+    }
 </script>
 
 </html>

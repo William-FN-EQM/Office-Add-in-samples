@@ -70,7 +70,7 @@
             const authData = await authResponse.json();
             const token = authData.token;
 
-            const url = `${reportUrl}/${reportId}`;
+            const url = `${reportUrl}${reportId}`;
             const reportResponse = await fetch(url, {
                 method: 'GET',
                 headers: {

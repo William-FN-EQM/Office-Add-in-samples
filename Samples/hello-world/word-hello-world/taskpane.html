@@ -100,11 +100,11 @@
     }
 
     function decodeHtmlEntities(str) {
-        return str.replace(/&quot;/g, '"')
+        return str.replace(/&quot;/g, "'")
                     .replace(/&amp;/g, '&')
                     .replace(/&lt;/g, '<')
                     .replace(/&gt;/g, '>')
-                    .replace(/&#39;/g, "'");
+                    .replace(/&#39;/g, '"');
     }
 </script>
 

@@ -23,7 +23,7 @@
             <div><span>reportId:</span><input id="reportId" type="text" maxlength="255"/></div>
         </div>
         <div>
-            <button id="insertDisclosure">insert Report</button>
+            <button id="insertReport">insert Report</button>
         </div>
     </p>
 </body>
@@ -33,7 +33,7 @@
         // Check that we loaded into Word
         if (info.host === Office.HostType.Word) {
             document.getElementById("helloButton").onclick = sayHello;
-            document.getElementById("insert report").onclick = fetchData244;
+            document.getElementById("insertReport").onclick = fetchData;
         }
     });
 

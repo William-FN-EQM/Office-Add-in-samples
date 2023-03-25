@@ -66,10 +66,8 @@
                     'password': `${password}`,
                 }),
             });
-            console.log("2");
             const authData = await authResponse.json();
             const token = authData.token;
-            console.log("3: "+authData);
             const reportResponse = await fetch(reportUrl, {
                 method: 'GET',
                 headers: {
@@ -79,13 +77,12 @@
             });
 
             const reportData = await reportResponse.json();
-            console.log("4");
             await Word.run(async (context) => {
-                const p3 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
-                p3.font.color = "blue";
                 const body = context.document.body;
+
+                console.log(reportData.content);
                 body.insertHtml(reportData.content, Word.InsertLocation.end);
-                const p4 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
+                const p4 = context.document.body.insertParagraph(reportData.content, Word.InsertLocation.end);
                 p4.font.color = "blue";
                 // body.insertParagraph("EQM Lab insert Disclosure", "End");
                 // body.insertParagraph(data.content, "End");

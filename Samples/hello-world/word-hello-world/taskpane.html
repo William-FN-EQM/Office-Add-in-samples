@@ -82,7 +82,7 @@
 
             const reportData = await reportResponse.json();
             const parser = new DOMParser();
-            const parsedHtml = parser.parseFromString(reportDataContent, 'text/html');
+            const parsedHtml = parser.parseFromString(reportData.content, 'text/html');
             const disclosureDiv = parsedHtml.querySelector('.disclosure');
             const dataValue = disclosureDiv.getAttribute('data-value');
             const decodedDataValue = decodeHtmlEntities(dataValue);

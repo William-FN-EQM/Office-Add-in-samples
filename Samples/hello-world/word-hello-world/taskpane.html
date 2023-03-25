@@ -9,10 +9,22 @@
 
 <body>
     <p>This add-in will insert the text 'Hello world!'.</p>
-    <button id="helloButton">Say hello</button>
-
-    <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
-    <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/word-add-in-hello-world-run" />
+    <div>
+        <button id="helloButton">Say hello William</button>
+        <!-- <div role="button" id="insertDisclosure" class="ms-welcome__action ms-Button ms-font-xl"><span>Embeded Disclosure</span></div> -->
+        <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
+        <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/word-add-in-hello-world-run" />
+    </div>
+    <p>
+        <div><span>EQM API Test - read report and embeded to Word</span></div>
+        <div>
+            <div><span>Account:</span><input id="accountId" type="text" maxlength="255"/> </div>
+            <div><span>Password:</span><input id="pwId" type="password" maxlength="255"/></div>
+        </div>
+        <div>
+            <button id="insertDisclosure">insert Report 241</button>
+        </div>
+    </p>
 </body>
 
 <script>
@@ -20,6 +32,7 @@
         // Check that we loaded into Word
         if (info.host === Office.HostType.Word) {
             document.getElementById("helloButton").onclick = sayHello;
+            document.getElementById("insertDisclosure").onclick = fetchData;
         }
     });
 
@@ -33,6 +46,92 @@
             return context.sync();
         });
     }
+
+    async function fetchData() {
+        console.log("1");
+        try {
+            const authUrl = "https://devapi.eqm.ai/authenticate";
+            const reportUrl = "https://devapi.eqm.ai/disclosurereport/241";
+
+            const account = document.getElementById("accountId").value;
+            const password = document.getElementById("pwId").value;
+
+            const authResponse = await fetch(authUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'username': '${account}',
+                    'password': '${password}',
+                }),
+            });
+            console.log("2");
+            const authData = await authResponse.json();
+            const token = authData.token;
+            console.log("3: "+authData);
+            const reportResponse = await fetch(reportUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            const reportData = await reportResponse.json();
+            console.log("4");
+            await Word.run(async (context) => {
+                const p3 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
+                p3.font.color = "blue";
+                const body = context.document.body;
+                body.insertHtml(reportData.content, Word.InsertLocation.end);
+                const p4 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
+                p4.font.color = "blue";
+                // body.insertParagraph("EQM Lab insert Disclosure", "End");
+                // body.insertParagraph(data.content, "End");
+            });
+        } catch (error) {
+            console.log("error"+error);
+        }
+    }
+
+    // function insertDisclosure() {
+    //     return Word.run(async (context) => {
+    //         try {
+    //         // insert a paragraph at the end of the document.
+    //         const paragraph = context.document.body.insertParagraph("D 1", Word.InsertLocation.end);
+    //         paragraph.font.color = "blue";
+    //         const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZXd1c2VyMUBnbWFpbC5jb20iLCJjb21wYW55SWQiOjEsInJvbGUiOiJBZG1pbmlzdHJhdG9yIiwibmFtZSI6InVzZXI0MyIsImV4cCI6MTY4MTcxNTU0NiwidXNlcklkIjoxLCJpYXQiOjE2NzkxMjM1NDZ9.YOaCU0zzTZGh35sPI1_RjmsW2ZCTThUWJoi3GcoFcxkxZO9zt3SxCa_XCKf6oDOu_ExFvmad3-3pC5lrv7kPXA";
+    //         const apiUrl = "https://devapi.eqm.ai/disclosurereport/241";
+    //         const response = await fetch(apiUrl, {
+    //             headers: {
+    //             Authorization: "Bearer ${token}",
+    //             "Content-Type": "application/json",
+    //             },
+    //         });
+    //         // insert a paragraph at the end of the document.
+    //         const p2 = context.document.body.insertParagraph("D 2", Word.InsertLocation.end);
+    //         p2.font.color = "blue";
+    //         const data = await response.json();
+
+    //         await Word.run(async (context) => {
+    //             const p3 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
+    //             p3.font.color = "blue";
+    //             const body = context.document.body;
+    //             body.insertHtml(data.content, Word.InsertLocation.end);
+    //             const p4 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
+    //             p4.font.color = "blue";
+    //             // body.insertParagraph("EQM Lab insert Disclosure", "End");
+    //             // body.insertParagraph(data.content, "End");
+    //         });
+    //         } catch (error) {
+    //         const p5 = context.document.body.insertParagraph("D 5", Word.InsertLocation.end);
+    //         context.document.body.insertParagraph(error, Word.InsertLocation.end);
+    //             p5.font.color = "blue";
+    //         // console.log("Error in get disclsoure list: ", error);
+    //         }
+    //     });
+    // }
 </script>
 
 </html>

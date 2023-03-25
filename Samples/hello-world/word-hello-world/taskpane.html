@@ -48,7 +48,6 @@
     }
 
     async function fetchData() {
-        console.log("1");
         try {
             const authUrl = "https://devapi.eqm.ai/authenticate";
             const reportUrl = "https://devapi.eqm.ai/disclosurereport/241";
@@ -82,53 +81,15 @@
 
                 console.log(reportData.content);
                 body.insertHtml(reportData.content, Word.InsertLocation.end);
-                const p4 = context.document.body.insertParagraph(reportData.content, Word.InsertLocation.end);
-                p4.font.color = "blue";
-                // body.insertParagraph("EQM Lab insert Disclosure", "End");
-                // body.insertParagraph(data.content, "End");
+                //const p4 = context.document.body.insertParagraph(reportData.content, Word.InsertLocation.end);
+                //p4.font.color = "blue";
+                await context.sync();
             });
         } catch (error) {
             console.log("error"+error);
         }
     }
 
-    // function insertDisclosure() {
-    //     return Word.run(async (context) => {
-    //         try {
-    //         // insert a paragraph at the end of the document.
-    //         const paragraph = context.document.body.insertParagraph("D 1", Word.InsertLocation.end);
-    //         paragraph.font.color = "blue";
-    //         const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuZXd1c2VyMUBnbWFpbC5jb20iLCJjb21wYW55SWQiOjEsInJvbGUiOiJBZG1pbmlzdHJhdG9yIiwibmFtZSI6InVzZXI0MyIsImV4cCI6MTY4MTcxNTU0NiwidXNlcklkIjoxLCJpYXQiOjE2NzkxMjM1NDZ9.YOaCU0zzTZGh35sPI1_RjmsW2ZCTThUWJoi3GcoFcxkxZO9zt3SxCa_XCKf6oDOu_ExFvmad3-3pC5lrv7kPXA";
-    //         const apiUrl = "https://devapi.eqm.ai/disclosurereport/241";
-    //         const response = await fetch(apiUrl, {
-    //             headers: {
-    //             Authorization: "Bearer ${token}",
-    //             "Content-Type": "application/json",
-    //             },
-    //         });
-    //         // insert a paragraph at the end of the document.
-    //         const p2 = context.document.body.insertParagraph("D 2", Word.InsertLocation.end);
-    //         p2.font.color = "blue";
-    //         const data = await response.json();
-
-    //         await Word.run(async (context) => {
-    //             const p3 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
-    //             p3.font.color = "blue";
-    //             const body = context.document.body;
-    //             body.insertHtml(data.content, Word.InsertLocation.end);
-    //             const p4 = context.document.body.insertParagraph("D 3", Word.InsertLocation.end);
-    //             p4.font.color = "blue";
-    //             // body.insertParagraph("EQM Lab insert Disclosure", "End");
-    //             // body.insertParagraph(data.content, "End");
-    //         });
-    //         } catch (error) {
-    //         const p5 = context.document.body.insertParagraph("D 5", Word.InsertLocation.end);
-    //         context.document.body.insertParagraph(error, Word.InsertLocation.end);
-    //             p5.font.color = "blue";
-    //         // console.log("Error in get disclsoure list: ", error);
-    //         }
-    //     });
-    // }
 </script>
 
 </html>
